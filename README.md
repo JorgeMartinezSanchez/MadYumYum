@@ -1,2 +1,2 @@
 # MadYumYum
-Deltarune themed restaurant for WebApp I
+Deltaroon themed restaurant for WebApp I
