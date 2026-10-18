@@ -1,6 +1,7 @@
 from backend.flask.app import Flask
 
 app = Flask(__name__)
+app.config.from_object("backend.flask.app.config.Config")
 
 @app.route("/")
 def hello_world():
