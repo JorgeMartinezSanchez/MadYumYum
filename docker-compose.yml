@@ -1,5 +1,38 @@
 services:
-  web:
-    image: python:latest-slim
+  flask-api:
+    build: ./backend/flask/
     container_name: backend
-    
+    ports:
+      - "5000:5000"
+    networks:
+      - default
+      
+  django:
+    build: ./backend/myy_django/
+    container_name: backend_django
+    ports:
+      - "8000:8000"
+    networks:
+      - default
+  
+  postgresql:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.ddl:/docker-entrypoint-initdb.d/schema.ddl
+    networks:
+      - default
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    driver: bridge
