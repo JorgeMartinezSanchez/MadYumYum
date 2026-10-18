@@ -6,7 +6,10 @@ services:
       - "5000:5000"
     networks:
       - default
-      
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
   django:
     build: ./backend/myy_django/
     container_name: backend_django
@@ -14,6 +17,9 @@ services:
       - "8000:8000"
     networks:
       - default
+    depends_on:
+      postgresql:
+        condition: service_healthy
   
   postgresql:
     image: postgres:latest
@@ -27,6 +33,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/schema.ddl:/docker-entrypoint-initdb.d/schema.ddl
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     networks:
       - default
 
